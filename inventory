@@ -1,0 +1,13 @@
+[web]
+worker1
+
+[db]
+worker2 user=ansible1
+
+[all:children]
+web
+db
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3.12
+user=ansible
