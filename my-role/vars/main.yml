@@ -1,0 +1,25 @@
+#SPDX-License-Identifier: MIT-0
+---
+# vars file for my-role
+# CentOS, Redhat 계열에서는 아래와 같이
+# service_name: httpd
+# src_file_path: ../files/index.html
+# dest_file_path: /var/www/html
+# httpd_packages:
+#   - httpd-tools
+#   - httpd-filesystem
+#   - httpd
+# supported_distros:
+#   - CentOS
+#   - Ubuntu
+
+# 우분투
+service_name: apache2
+src_file_path: ../files/index.html
+dest_file_path: /var/www/html
+httpd_packages:
+  - apache2-utils
+  - apache2
+supported_distros:
+  - CentOS
+  - Ubuntu
