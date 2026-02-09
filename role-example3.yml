@@ -1,0 +1,12 @@
+- hosts: worker1
+
+  roles:
+    - role: my-role
+      service_title: "Apache Web Server"
+    - role: my-role2
+
+
+  tasks:
+    - name: Print finish role play
+      ansible.builtin.debug:
+        msg: "Finish role play"

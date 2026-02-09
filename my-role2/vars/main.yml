@@ -1,0 +1,7 @@
+#SPDX-License-Identifier: MIT-0
+---
+# vars file for my-role2
+
+service_port:
+  - http
+  - https

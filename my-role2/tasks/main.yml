@@ -1,0 +1,32 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for my-role2
+
+# - name: Config firewalld
+#   ansible.posix.firewalld:
+#     service: "{{ item }}"
+#     permanent: true
+#     state: enabled
+#   loop: "{{ service_port }}"
+
+# - name: Reload firewalld
+#   ansible.builtin.service:
+#     name: firewalld
+#     state: reloaded
+
+# 우분투
+# 지금 태스크는 name: "{{ item }}"이라서 
+# UFW “앱 프로파일”(ufw app list)에 
+# http/https가 있어야 하는데, 
+# Ubuntu 기본에선 보통 Apache, Nginx 같은 프로파일만 있고 
+# http/https 프로파일은 없음 → 그래서 “profile matching 'http' 없음”이 뜸
+- name: Allow ports via UFW (map service->port)
+  community.general.ufw:
+    rule: allow
+    port: "{{ '80' if item == 'http' else '443' if item == 'https' else item }}"
+    proto: tcp
+  loop: "{{ service_port }}"
+
+- name: Enable UFW
+  community.general.ufw:
+    state: enabled
