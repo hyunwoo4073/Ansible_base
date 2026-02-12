@@ -1,0 +1,43 @@
+# ---
+
+# - hosts: localhost
+#   tasks:
+#     - name: Create ssh key
+#       ansible.builtin.user:
+#         name: "{{ userid }}"
+#         generate_ssh_key: true
+#         ssh_key_bits: 2048
+#         ssh_key_file: /home/{{ userid }}/.ssh/id_rsa
+
+# - hosts: worker
+#   tasks:
+#     - name: Copy SSH Pub key
+#       ansible.posix.authorized_key:
+#         user: "{{ userid }}"
+#         state: present
+#         key: "{{ lookup('file', '/home/{{ userid }}/.ssh/id_rsa.pub') }}"
+
+
+- hosts: localhost
+  tasks:
+    - name: Create ssh key
+      ansible.builtin.user:
+        name: "{{ userid }}"
+        generate_ssh_key: true
+        ssh_key_bits: 2048
+        ssh_key_file: "/home/{{ userid }}/.ssh/id_rsa"
+
+    - name: Stage pubkey for lookup
+      ansible.builtin.copy:
+        src: "/home/{{ userid }}/.ssh/id_rsa.pub"
+        dest: "/tmp/{{ userid }}.id_rsa.pub"
+        remote_src: true
+        mode: "0644"
+
+- hosts: worker
+  tasks:
+    - name: Copy SSH Pub key
+      ansible.posix.authorized_key:
+        user: "{{ userid }}"
+        state: present
+        key: "{{ lookup('file', '/tmp/' ~ userid ~ '.id_rsa.pub') }}"

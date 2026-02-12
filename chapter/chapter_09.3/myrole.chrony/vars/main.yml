@@ -1,0 +1,9 @@
+#SPDX-License-Identifier: MIT-0
+---
+# vars file for myrole.chrony
+
+package_name: chrony
+service_name: "{{ 'chrony' if ansible_facts.distribution == 'Ubuntu' else 'chronyd' }}"
+fedora_os:
+  - RedHat
+  - CentOS
