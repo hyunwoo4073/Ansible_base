@@ -1,0 +1,7 @@
+nodes:
+  - hostname: worker1
+    fqdn: worker1.exp.com
+    net_ip: 192.168.1.101
+  - hostname: worker2
+    fqdn: worker2.exp.com
+    net_ip: 192.168.1.102

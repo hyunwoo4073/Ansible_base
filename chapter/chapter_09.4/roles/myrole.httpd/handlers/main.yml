@@ -1,0 +1,27 @@
+#SPDX-License-Identifier: MIT-0
+---
+# handlers file for myrole.httpd
+
+# RHEL
+# - name: Restart httpd
+#   ansible.builtin.service:
+#     name: httpd
+#     state: restarted
+
+# - name: Reload firewalld
+#   ansible.builtin.systemd:
+#     name: firewalld
+#     state: reloaded
+
+# - name: Reconfigure sefcontext
+#   ansible.builtin.command: chcon -R -h -t httpd_sys_content_t /repo
+
+# Ubuntu
+- name: Restart apache2
+  ansible.builtin.service:
+    name: apache2
+    state: restarted
+
+- name: Reload ufw
+  ansible.builtin.command: ufw reload
+  changed_when: false

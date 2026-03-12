@@ -1,0 +1,59 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for myrole.httpd
+
+# RHEL
+# - name: Make repo directory
+#   ansible.builtin.file:
+#     path: "{{ repo_dir }}"
+#     state: directory
+
+# - name: Install httpd
+#   ansible.builtin.dnf:
+#     name: "{{ item }}"
+#     state: latest
+#   loop: "{{ httpd_service }}"
+
+# - name: Copy repo.conf file
+#   ansible.builtin.copy:
+#     src: ../files/repo.conf
+#     dest: /etc/httpd/conf.d/
+#   notify:
+#     - Restart httpd
+#     - Reconfigure sefcontext
+
+# - name: Add http to firewalld
+#   ansible.posix.firewalld:
+#     service: http
+#     permanent: true
+#     state: enabled
+#   notify: Reload firewalld
+
+
+# Ubuntu
+- name: Make repo directory
+  ansible.builtin.file:
+    path: "{{ repo_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Install apache2
+  ansible.builtin.apt:
+    name:
+      - apache2
+    state: latest
+    update_cache: true
+
+- name: Copy repo.conf file
+  ansible.builtin.copy:
+    src: repo.conf
+    dest: /etc/apache2/sites-available/000-default.conf
+    mode: "0644"
+  notify:
+    - Restart apache2
+
+- name: Allow http via ufw
+  community.general.ufw:
+    rule: allow
+    name: Apache
+  when: ansible_facts.os_family == "Debian"

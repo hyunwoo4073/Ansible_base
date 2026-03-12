@@ -1,0 +1,10 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for myrole.netplan
+
+- name: Copy netplan file
+  ansible.builtin.template:
+    src: 01-netplan-ansible.yaml.j2
+    dest: /etc/netplan/50-cloud-init.yaml
+  when: net_info[0].con_name in ansible_facts.interfaces
+  notify: Netplan apply
