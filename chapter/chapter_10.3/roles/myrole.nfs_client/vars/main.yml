@@ -1,0 +1,9 @@
+#SPDX-License-Identifier: MIT-0
+---
+# vars file for myrole.nfs_client
+
+# CentOS 및 Ubuntu
+dnf_nfs_packages:
+  - nfs-utils
+apt_nfs_packages:
+  - nfs-common

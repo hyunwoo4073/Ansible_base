@@ -1,0 +1,27 @@
+#SPDX-License-Identifier: MIT-0
+---
+# handlers file for myrole.nfs_server
+
+# CentOS
+# - name: Restart NFS Service
+#   ansible.builtin.service:
+#     name: nfs-server
+#     state: restarted
+
+# - name: Reload firewalld
+#   ansbile.builtin.service:
+#     name: firewalld
+#     state: reloaded
+
+
+# Ubuntu
+- name: Restart NFS Service
+  ansible.builtin.service:
+    name: nfs-kernel-server
+    state: restarted
+  when: not ansible_check_mode
+
+- name: Reload ufw
+  ansible.builtin.command: ufw reload
+  changed_when: false
+  when: not ansible_check_mode

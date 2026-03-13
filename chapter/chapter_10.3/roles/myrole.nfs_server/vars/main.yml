@@ -1,0 +1,12 @@
+#SPDX-License-Identifier: MIT-0
+---
+# vars file for myrole.nfs_server
+
+# CentOS
+# nfs_packages:
+#   - nfs-utils
+
+# Ubuntu
+nfs_packages:
+  - nfs-kernel-server
+  - rpcbind

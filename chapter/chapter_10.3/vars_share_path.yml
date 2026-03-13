@@ -1,0 +1,5 @@
+---
+
+share_server: worker1
+share_path: /mnt/nfs_shares
+mount_path: /mnt/nfs_data

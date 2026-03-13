@@ -1,0 +1,84 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for myrole.nfs_server
+
+# CentOS
+# - name: Install NFS packages
+#   ansible.builtin.dnf:
+#     name: "{{ item }}"
+#     state: present
+#   loop: "{{ nfs_packages }}"
+
+# - name: Create NFS export directory
+#   ansbile.builtin.file:
+#     path: "{{ share_path }}"
+#     state: directory
+#     owner: root
+#     group: root
+#     mode: "0777"
+  
+# - name: Configure NFS exports
+#   ansible.builtin.lineinfile:
+#     path: "/etc/exports"
+#     line: "{{ share_path }} *(rw,sync)"
+#     regexp: "^{{ share_path }}"
+#     state: present
+#     create: true
+#   notify: Restart NFS Service
+
+# - name: Add nfs to firewalld
+#   ansbile.posix.firewalld:
+#     service: "{{ item }}"
+#     permanent: true
+#     state: enabled
+#   loop:
+#     - nfs
+#     - rpc-bind
+#     - mountd
+#   notify: Reload firewalld
+
+# Ubuntu
+#SPDX-License-Identifier: MIT-0
+# tasks file for myrole.nfs_server
+
+# Ubuntu
+- name: Install NFS packages
+  ansible.builtin.apt:
+    name: "{{ nfs_packages }}"
+    state: present
+    update_cache: true
+
+- name: Create NFS export directory
+  ansible.builtin.file:
+    path: "{{ share_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0777"
+
+- name: Configure NFS exports
+  ansible.builtin.lineinfile:
+    path: /etc/exports
+    line: "{{ share_path }} *(rw,sync)"
+    regexp: "^{{ share_path | regex_escape() }}\\s"
+    state: present
+    create: true
+  notify: Restart NFS Service
+
+- name: Allow NFS related ports via ufw
+  community.general.ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  loop:
+    - "111"
+    - "2049"
+
+- name: Allow NFS related UDP ports via ufw
+  community.general.ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: udp
+  loop:
+    - "111"
+    - "2049"
